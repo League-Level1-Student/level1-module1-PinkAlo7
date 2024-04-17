@@ -9,7 +9,7 @@ package _02_race_car;
 public class RaceCar {
 	private String brand;
 	private int positionInRace;
-	public boolean damaged = false;
+	private boolean damaged = false;
 	
 	/**
 	 * 
