@@ -14,13 +14,25 @@ public class TurfWar extends PApplet {
         int x;
         int y;
         int speed;
-        int playerSize;
+        int  playerSizeX;
+        int playerSizeY;
         int playerColor;
         int upKey;
         int leftKey;
         int downKey;
         int rightKey;
-
+        Player(int x, int y, int speed, int playerSizeX, int playerSizeY, int playerColor, int upKey, int leftKey, int downKey, int rightKey) {
+        	this.x = x;
+        	this.y = y;
+        	this.speed = speed;
+        	this.playerSizeX = playerSizeX;
+        	this.playerSizeY = playerSizeY;
+        	this.playerColor = playerColor;
+        	this.upKey = upKey;
+        	this.leftKey = leftKey;
+        	this.downKey = downKey;
+        	this.rightKey = rightKey;
+        }
         /*
          * The member variables below do not need to be initialized in the
          * constructor.
@@ -36,6 +48,8 @@ public class TurfWar extends PApplet {
              * 2. Draw a rectangle to represent the the Player using its color,
              * coordinates and size.
              */
+        	fill(playerColor);
+            rect(x,y, playerSizeX, playerSizeY);
             
         }
 
@@ -52,9 +66,22 @@ public class TurfWar extends PApplet {
                 y-=speed;
             }
             
+            if(moveDown) {
+            	y+=speed;
+            }
+            
+            if(moveLeft) {
+            	x-=speed;
+            }
+            
+            if(moveRight) {
+            	x+=speed;
+            }
+            
+         
             /* 
              * 3. Make the Player move in every other direction.
-             * 
+             
              * Note: You do not need to use the statsBoardLine for the 
              * other directions.
              */
@@ -108,7 +135,8 @@ public class TurfWar extends PApplet {
      * 4. Declare two variables of the Player class called player1 and player2.
      * Do not initialize them yet.
      */
-
+     Player player1;
+     Player player2;
     
 
     // Do not change these variables
@@ -129,7 +157,7 @@ public class TurfWar extends PApplet {
     @Override
     public void settings() {
         // 5. Set the size for your sketch. Make it at least 300x300.
-       
+       size(900,900);
     }
 
     @Override
@@ -141,102 +169,108 @@ public class TurfWar extends PApplet {
         ((java.awt.Canvas) surface.getNative()).requestFocus();
 
         // 6. Set the background color.
-
+      background(99, 66, 9);
 
         // 7. Call the noStroke Method.
-        
+        noStroke();
         
         /*
          * 8. Initialize the two Player objects. For one use UP, LEFT, DOWN,
          * RIGHT for the keys, for the second use the W,A,S,D final int 
          * variables created above. 
-         * 
+          
          * Note: Make sure to place your players' y positions below the statsBoardLine
          * or else they will be hidden behind the game stats.
          * 
          * Note: Use the Color class for the color, e.g. Color.BLUE.getRGB(). Do
          * not select black, white or the color you used for your background as it
          * will give that player an unfair advantage.
-         */
-
+         *///x,y,speed,playerSizeX, playerSizeY, color, up, left, down, right
         
+       player1 = new Player(70, 300, 10, 80, 130, new Color(210,10,173).getRGB(), UP,LEFT, DOWN, RIGHT);
+       player2 = new Player(70, 101, 10, 80, 130, new Color(27, 245, 201).getRGB(), 87, 65, 83, 68);
     }
 
     /*
      * 9. Uncomment these methods once you have created and initialized player 1
      * and player 2
-     */
+    
+    */
 
-//    public void isGameOver() {
-//        if (millis() >= endOfGame && !gameOver) {
-//            gameOver = true;
-//        }
-//    }
-//
-//    public void endGame() {
-//        
-//        String winMessage = "";
-//        
-//        double player1Percentage = calculateRoundedPixelPercentage(player1.pixelCount);
-//        double player2Percentage = calculateRoundedPixelPercentage(player2.pixelCount);
-//        
-//        
-//        if (player1Percentage == player2Percentage) {
-//            winMessage = "TIE";
-//
-//        } else if (player1Percentage > player2Percentage) {
-//            
-//            winMessage = "PLAYER 1 WINS!";
-//            
-//        } else {
-//            winMessage = "PLAYER 2 WINS!";
-//        }
-//        
-//        text(winMessage, (width/2 - (winMessage.length()*statsBoardSpacing) / 4)  , statsBoardSpacing*4);
-//        
-//        noLoop();
-//    }
-//    
-//    public void displayStats() {
-//        
-//        fill(Color.BLACK.getRGB());
-//        rect(0,0, width, 100);
-//        fill(Color.WHITE.getRGB());
-//        textSize(24);
-//        
-//        int gameTimeLeft = (endOfGame / 1000) - (int)(millis() / 1000);
-//        String timerDisplay = "Seconds Left: " + gameTimeLeft;
-//        text(timerDisplay, (width/2 - (timerDisplay.length()*statsBoardSpacing) / 4)  , statsBoardSpacing);
-//        
-//        loadPixels();
-//        player1.countPixels();
-//        player2.countPixels();
-//        
-//        String player1Display = "Player 1 Coverage: " + calculateRoundedPixelPercentage(player1.pixelCount) + "%";
-//        text(player1Display, (width/2 - (player1Display.length()*statsBoardSpacing) / 4)  , statsBoardSpacing*2);
-//        
-//        String player2Display = "Player 2 Coverage: " + calculateRoundedPixelPercentage(player2.pixelCount) + "%";
-//        text(player2Display, (width/2 - (player2Display.length()*statsBoardSpacing) / 4)  , statsBoardSpacing*3);
-//    }
-//    
-//    public double calculateRoundedPixelPercentage(int pixelCount) {
-//        double pixelPercentage = (pixelCount / (double) (width * height - width * statsBoardLine )) * 100;
-//        double pixelsRounded = Math.round(pixelPercentage * 100) / 100.0;
-//        return pixelsRounded;
-//    }
+    public void isGameOver() {
+       if (millis() >= endOfGame && !gameOver) {
+            gameOver = true;
+        }
+    }
+
+      public void endGame() {
+       
+       String winMessage = "";
+        
+        double player1Percentage = calculateRoundedPixelPercentage(player1.pixelCount);
+        double player2Percentage = calculateRoundedPixelPercentage(player2.pixelCount);
+        
+       
+        if (player1Percentage == player2Percentage) {
+            winMessage = "TIE";
+
+        } else if (player1Percentage > player2Percentage) {
+            
+            winMessage = "PLAYER 1 WINS!";
+            
+        } else {
+            winMessage = "PLAYER 2 WINS!";
+        }
+        
+        text(winMessage, (width/2 - (winMessage.length()*statsBoardSpacing) / 4)  , statsBoardSpacing*4);
+        
+        noLoop();
+    }
+    
+    public void displayStats() {
+        
+        fill(Color.BLACK.getRGB());
+        rect(0,0, width, 100);
+        fill(Color.WHITE.getRGB());
+        textSize(24);
+        
+        int gameTimeLeft = (endOfGame / 1000) - (int)(millis() / 1000);
+        String timerDisplay = "Seconds Left: " + gameTimeLeft;
+        text(timerDisplay, (width/2 - (timerDisplay.length()*statsBoardSpacing) / 4)  , statsBoardSpacing);
+        
+        loadPixels();
+        player1.countPixels();
+        player2.countPixels();
+        
+        String player1Display = "Player 1 Coverage: " + calculateRoundedPixelPercentage(player1.pixelCount) + "%";
+        text(player1Display, (width/2 - (player1Display.length()*statsBoardSpacing) / 4)  , statsBoardSpacing*2);
+        
+        String player2Display = "Player 2 Coverage: " + calculateRoundedPixelPercentage(player2.pixelCount) + "%";
+        text(player2Display, (width/2 - (player2Display.length()*statsBoardSpacing) / 4)  , statsBoardSpacing*3);
+    }
+    
+    public double calculateRoundedPixelPercentage(int pixelCount) {
+        double pixelPercentage = (pixelCount / (double) (width * height - width * statsBoardLine )) * 100;
+        double pixelsRounded = Math.round(pixelPercentage * 100) / 100.0;
+        return pixelsRounded;
+    }
 
     @Override
     public void draw() {
         // 10. Call the drawPlayer method for both players.
-        
+        player1.drawPlayer();
+        player2.drawPlayer();
         // 11. Call the update method for both players.
-
+        player1.update();
+        player2.update();
         // 12. Call the isGameOver method.
-        
+        isGameOver();
         // 13. Call the displayStats method.
-
+        displayStats();
         // 14. If gameOver is true call the endGame method.
-
+      if(gameOver) {
+    	  endGame();
+      }
     }
 
     @Override
@@ -244,7 +278,10 @@ public class TurfWar extends PApplet {
         /*
          * 15. Call the enableMovement method for both players and pass keyCode
          * to the method.
-         */        
+         */      
+    	System.out.println(keyCode);
+    	player1.enableMovement(keyCode);
+    	player2.enableMovement(keyCode);
 
     }
 
@@ -254,7 +291,8 @@ public class TurfWar extends PApplet {
          * 16. Call the disableMovement method for both players and pass keyCode
          * to the method.
          */
-
+    	player1.disableMovement(keyCode);
+    	player2.disableMovement(keyCode);
     }
 
     /*
